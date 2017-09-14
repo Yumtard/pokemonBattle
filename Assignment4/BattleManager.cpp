@@ -2,15 +2,15 @@
 
 void BattleManager::Update()
 {
-	std::string tackle = "Tackle";
-	std::string leechLife = "Leech Life";
-	std::string thunderShock = "Thunder Shock";
-	std::string fireBlast = "Fire Blast";
-	std::string ember = "Ember";
-	std::string waterGun = "Water Gun";
-	std::string slam = "Slam";
-	std::string quickAttack = "Quick Attack";
-	std::string scratch = "Scratch";
+	char* tackle = "Tackle";
+	char* leechLife = "Leech Life";
+	char* thunderShock = "Thunder Shock";
+	char* fireBlast = "Fire Blast";
+	char* ember = "Ember";
+	char* waterGun = "Water Gun";
+	char* slam = "Slam";
+	char* quickAttack = "Quick Attack";
+	char* scratch = "Scratch";
 
 	moves[tackle] = new DamagingMove(tackle, 10);
 	moves[leechLife] = new AbsorbingMove(leechLife, 8);
@@ -22,10 +22,10 @@ void BattleManager::Update()
 	moves[quickAttack] = new DamagingMove(quickAttack, 10);
 	moves[scratch] = new DamagingMove(scratch, 12);
 
-	std::string pikachuName = "Pikachu";
-	std::string charmanderName = "Charmander";
-	std::string bulbasaurName = "Bulbasaur";
-	std::string squirtleName = "Squirtle";
+	char* pikachuName = "Pikachu";
+	char* charmanderName = "Charmander";
+	char* bulbasaurName = "Bulbasaur";
+	char* squirtleName = "Squirtle";
 	Pokemon* pikachu = new Pokemon(pikachuName, 20);
 	Pokemon* charmander = new Pokemon(charmanderName, 20);
 	Pokemon* bulbasaur = new Pokemon(bulbasaurName, 20);
@@ -51,8 +51,6 @@ void BattleManager::Update()
 	squirtle->AddMove(waterGun);
 	squirtle->AddMove(slam);
 
-	std::cout << "This worked?" << std::endl;
-
 	players[0] = new Player("Ash");
 	players[0]->AddPokemon(pikachu);
 	players[0]->AddPokemon(charmander);
@@ -61,21 +59,22 @@ void BattleManager::Update()
 	players[1]->AddPokemon(bulbasaur);
 	players[1]->AddPokemon(squirtle);
 	
+	std::cout << players[0]->GetName() << ": GO! " << players[0]->GetPokemon().GetName() << "!" << std::endl;
+	std::cout << players[1]->GetName() << ": GO! " << players[1]->GetPokemon().GetName() << "!\n" << std::endl;
 
-	while(!players[activePlayer]->HasLost() || !players[1 - activePlayer]->HasLost())
+	while(!players[activePlayer]->HasLost() && !players[1 - activePlayer]->HasLost())
 	{
+		if (players[activePlayer]->GetPokemon().IsDead())
+		{
+			state = choosingPokemon;
+			break;
+		}
+
 		switch (state)
 		{
 		case menu:
-			if ((players[activePlayer]->GetPokemon().IsDead()))
-			{
-				state = choosingPokemon;
-				break;
-			}
-			
-			std::cout << "Current Pokemon: " << players[activePlayer]->GetPokemon().GetName() << std::endl;
 			std::cout << "(1) Moves" << std::endl;
-			std::cout << "(2) Pokemons";
+			std::cout << "(2) Pokemons\n" << std::endl;
 
 			GetUserInput();
 
@@ -100,6 +99,8 @@ void BattleManager::Update()
 
 			players[activePlayer]->SwitchPokemon(userInput);
 
+			std::cout << players[activePlayer]->GetName() << " chose " << players[activePlayer]->GetPokemon().GetName() << std::endl;
+
 			state = menu;
 
 			break;
@@ -112,6 +113,8 @@ void BattleManager::Update()
 
 			curMove = players[activePlayer]->GetPokemon().GetMove(userInput);
 
+			std::cout << players[activePlayer]->GetName() << " chose " << curMove << std::endl;
+
 			state = battling;
 
 			break;
@@ -122,6 +125,7 @@ void BattleManager::Update()
 			moves[curMove]->Use(attacker, target);
 			std::cout << attacker.GetName() << " used " << curMove << std::endl;
 			std::cout << target.GetName() << " took " << moves[curMove]->GetDamage() << " damage." << std::endl;
+			std::cout << target.GetName() << " has " << target.GetHP() << " HP left.\n" << std::endl;
 
 			if (activePlayer == player1)
 			{
@@ -131,6 +135,8 @@ void BattleManager::Update()
 			{
 				activePlayer = player1;
 			}
+
+			state = menu;
 
 			break;
 		}
@@ -162,7 +168,6 @@ void BattleManager::GetUserInput()
 			if (menuChoice > 0 && menuChoice < 3)
 			{
 				invalidInput = false;
-				std::cout << "You chose " << menuChoice << std::endl;
 				userInput = menuChoice;
 			}
 
@@ -172,7 +177,6 @@ void BattleManager::GetUserInput()
 			if (moveChoice >= 0 && moveChoice < numMoves)
 			{
 				invalidInput = false;
-				std::cout << "You chose " << moveChoice << std::endl;
 				userInput = moveChoice;
 			}
 
@@ -182,7 +186,6 @@ void BattleManager::GetUserInput()
 			if (pokemonChoice >= 0 && pokemonChoice < numPokemons)
 			{
 				invalidInput = false;
-				std::cout << "You chose " << pokemonChoice << std::endl;
 				userInput = pokemonChoice;
 			}
 

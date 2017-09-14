@@ -1,6 +1,6 @@
 #include "Move.h"
 
-Move::Move(const std::string & name_in, int damage_in)
+Move::Move(char* name_in, int damage_in)
 	:
 	name(name_in),
 	damage(damage_in)

@@ -1,6 +1,6 @@
 #include "AbsorbingMove.h"
 
-AbsorbingMove::AbsorbingMove(const std::string & name_in, int damage_in)
+AbsorbingMove::AbsorbingMove(char* name_in, int damage_in)
 	:
 	Move(name_in, damage_in)
 {}

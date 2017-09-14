@@ -7,7 +7,7 @@ class DamagingMove
 	: public Move
 {
 public:
-	DamagingMove(const std::string& name_in, int damage_in);
+	DamagingMove(char* name_in, int damage_in);
 	void Use(Pokemon& attacker_in, Pokemon& target_in);
 
 private:

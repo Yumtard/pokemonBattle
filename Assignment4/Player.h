@@ -7,17 +7,17 @@
 class Player
 {
 public:
-	Player(const std::string& name_in);
+	Player(char* name_in);
 	void ViewPokemons();
 	void SwitchPokemon(int curPokemon_in);
 	void AddPokemon(Pokemon* pokemon_in);
 	Pokemon& GetPokemon();
-	const std::string& GetName() const;
+	const char* GetName() const;
 	bool HasLost() const;
 	int GetNumPokemons() const;
 
 private:
-	std::string name;
+	char* name;
 	int numPokemons;
 	int curPokemon;
 	static constexpr int maxNumPokemons = 6;

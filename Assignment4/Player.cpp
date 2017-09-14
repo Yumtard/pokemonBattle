@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(const std::string & name_in)
+Player::Player(char* name_in)
 	:
 	name(name_in)
 {
@@ -38,7 +38,7 @@ Pokemon & Player::GetPokemon()
 	return *pokemons[curPokemon];
 }
 
-const std::string & Player::GetName() const
+const char* Player::GetName() const
 {
 	return name;
 }
