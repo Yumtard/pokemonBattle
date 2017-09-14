@@ -7,14 +7,16 @@
 class Player
 {
 public:
-	Player(char* name_in);
+	Player(char* name_in, bool AI_in);
 	void ViewPokemons();
-	void SwitchPokemon(int curPokemon_in);
+	bool SwitchPokemon(int nextPokemon_in);
 	void AddPokemon(Pokemon* pokemon_in);
-	Pokemon& GetPokemon();
+	Pokemon& GetCurPokemon() const;
+	Pokemon& GetPokemon(int index) const;
 	const char* GetName() const;
-	bool HasLost() const;
+	bool HasNotLost() const;
 	int GetNumPokemons() const;
+	bool IsAI() const;
 
 private:
 	char* name;
@@ -22,4 +24,5 @@ private:
 	int curPokemon;
 	static constexpr int maxNumPokemons = 6;
 	Pokemon* pokemons[maxNumPokemons];
+	bool AI;
 };

@@ -15,6 +15,7 @@ public:
 	BattleManager() = default;
 	void Update();
 	void GetUserInput();
+	void ChangeActivePlayer();
 
 private:
 	enum ActivePlayer

@@ -18,16 +18,12 @@ void Pokemon::DisplayMoves() const
 	{
 		std::cout << "(" << i << ") " << availableMoves[i] << std::endl;
 	}
+	std::cout << "\n";
 }
 
 void Pokemon::TakeDamage(int damage_in)
 {
-	hp -= damage_in;
-	if (hp < 0)
-	{
-		hp = 0;
-	}
-//	hp -= std::min(damage_in, hp);
+	hp -= std::min(damage_in, hp);
 }
 
 const std::string & Pokemon::GetInfo()
@@ -35,10 +31,10 @@ const std::string & Pokemon::GetInfo()
 	std::string moves;
 	for (int i = 0; i < numMoves; i++)
 	{
-		moves += availableMoves[i] + " ";
+		moves += availableMoves[i] + ", ";
 	}
-
-	info = *name + "HP: " + std::to_string(hp) + "\nMoves: " + moves;
+	std::string stringName(name);
+	info = stringName + ", HP: " + std::to_string(hp) + ", Moves: " + moves;
 	return info;
 }
 
