@@ -52,6 +52,11 @@ const std::string& Pokemon::GetMove(int choice_in) const
 	return m_AvailableMoves[choice_in];
 }
 
+const std::string & Pokemon::SetMove(int choice_in)
+{
+	m_CurMove = m_AvailableMoves[choice_in];
+}
+
 bool Pokemon::IsDead() const
 {
 	return m_hp == 0;

@@ -35,4 +35,5 @@ private:
 	std::map<std::string, Move*> m_Moves;
 	int m_UserInput;
 	std::string m_CurMove;
+	int numMovesLoaded;
 };

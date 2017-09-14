@@ -14,6 +14,7 @@ public:
 	const std::string& GetInfo();
 	void AddMove(const std::string& move_in);
 	const std::string& GetMove(int choice_in) const;
+	const std::string& SetMove(int choice_in);
 	bool IsDead() const;
 	int GetNumMoves() const;
 	int GetHP() const;
@@ -25,4 +26,5 @@ private:
 	static constexpr int m_NumMovesMax = 4;
 	std::string m_AvailableMoves[m_NumMovesMax];
 	std::string m_Info;
+	std::string m_CurMove;
 };
