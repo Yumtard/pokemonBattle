@@ -13,6 +13,7 @@ public:
 	const std::string& GetInfo() const;
 	void AddMove(const std::string& move_in);
 	const std::string& GetMove(int choice) const;
+	bool IsDead() const;
 
 private:
 	std::string name;
