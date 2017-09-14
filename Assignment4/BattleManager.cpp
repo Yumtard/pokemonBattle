@@ -12,15 +12,15 @@ void BattleManager::Update()
 	char* quickAttack = "Quick Attack";
 	char* scratch = "Scratch";
 
-	moves[tackle] = new DamagingMove(tackle, 10);
-	moves[leechLife] = new AbsorbingMove(leechLife, 8);
-	moves[thunderShock] = new DamagingMove(thunderShock, 12);
-	moves[fireBlast] = new DamagingMove(fireBlast, 15);
-	moves[ember] = new DamagingMove(ember, 10);
-	moves[waterGun] = new DamagingMove(waterGun, 10);
-	moves[slam] = new DamagingMove(slam, 12);
-	moves[quickAttack] = new DamagingMove(quickAttack, 10);
-	moves[scratch] = new DamagingMove(scratch, 12);
+	m_Moves[tackle] = new DamagingMove(tackle, 10);
+	m_Moves[leechLife] = new AbsorbingMove(leechLife, 8);
+	m_Moves[thunderShock] = new DamagingMove(thunderShock, 12);
+	m_Moves[fireBlast] = new DamagingMove(fireBlast, 15);
+	m_Moves[ember] = new DamagingMove(ember, 10);
+	m_Moves[waterGun] = new DamagingMove(waterGun, 10);
+	m_Moves[slam] = new DamagingMove(slam, 12);
+	m_Moves[quickAttack] = new DamagingMove(quickAttack, 10);
+	m_Moves[scratch] = new DamagingMove(scratch, 12);
 
 	char* pikachuName = "Pikachu";
 	char* charmanderName = "Charmander";
@@ -51,25 +51,25 @@ void BattleManager::Update()
 	squirtle->AddMove(waterGun);
 	squirtle->AddMove(slam);
 
-	players[0] = new Player("Ash", false);
-	players[0]->AddPokemon(pikachu);
-	players[0]->AddPokemon(charmander);
+	m_Players[0] = new Player("Ash", false);
+	m_Players[0]->AddPokemon(pikachu);
+	m_Players[0]->AddPokemon(charmander);
 
-	players[1] = new Player("Gary", false);
-	players[1]->AddPokemon(bulbasaur);
-	players[1]->AddPokemon(squirtle);
+	m_Players[1] = new Player("Gary", false);
+	m_Players[1]->AddPokemon(bulbasaur);
+	m_Players[1]->AddPokemon(squirtle);
 	
-	std::cout << players[0]->GetName() << ": GO! " << players[0]->GetCurPokemon().GetName() << "!" << std::endl;
-	std::cout << players[1]->GetName() << ": GO! " << players[1]->GetCurPokemon().GetName() << "!\n" << std::endl;
+	std::cout << m_Players[0]->GetName() << ": GO! " << m_Players[0]->GetCurPokemon().GetName() << "!" << std::endl;
+	std::cout << m_Players[1]->GetName() << ": GO! " << m_Players[1]->GetCurPokemon().GetName() << "!\n" << std::endl;
 
-	while(players[activePlayer]->HasNotLost() && players[1 - activePlayer]->HasNotLost())
+	while(m_Players[m_ActivePlayer]->HasNotLost() && m_Players[1 - m_ActivePlayer]->HasNotLost())
 	{
-		if (players[activePlayer]->GetCurPokemon().IsDead())
+		if (m_Players[m_ActivePlayer]->GetCurPokemon().IsDead())
 		{
-			state = choosingPokemon;
+			m_State = choosingPokemon;
 		}
 
-		switch (state)
+		switch (m_State)
 		{
 		case menu:
 		{
@@ -78,14 +78,14 @@ void BattleManager::Update()
 
 			GetUserInput();
 
-			if (userInput == 1)
+			if (m_UserInput == 1)
 			{
-				state = choosingMove;
+				m_State = choosingMove;
 				break;
 			}
-			else if (userInput == 2)
+			else if (m_UserInput == 2)
 			{
-				state = choosingPokemon;
+				m_State = choosingPokemon;
 				break;
 			}
 		}	
@@ -95,61 +95,60 @@ void BattleManager::Update()
 		case choosingPokemon:
 		{
 			std::cout << "Choose a pokemon" << std::endl;
-			players[activePlayer]->ViewPokemons();
+			m_Players[m_ActivePlayer]->ViewPokemons();
 
 			GetUserInput();
 
-			if (players[activePlayer]->SwitchPokemon(userInput))
+			if (m_Players[m_ActivePlayer]->SwitchPokemon(m_UserInput))
 			{
 				ChangeActivePlayer();
 			}
 
-			state = menu;
+			m_State = menu;
 		}
 
 		break;
 
 		case choosingMove:
 		{
-			Pokemon& curPokemon = players[activePlayer]->GetCurPokemon();
+			Pokemon& curPokemon = m_Players[m_ActivePlayer]->GetCurPokemon();
 			std::cout << "Choose move" << std::endl;
 			curPokemon.DisplayMoves();
 
 			GetUserInput();
 
-			curMove = curPokemon.GetMove(userInput);
+			m_CurMove = curPokemon.GetMove(m_UserInput);
 
-			std::cout << players[activePlayer]->GetName() << " chose " << curMove << std::endl;
+			std::cout << m_Players[m_ActivePlayer]->GetName() << " chose " << m_CurMove << std::endl;
 
-			state = battling;
+			m_State = battling;
 		}
 			
 		break;
 
 		case battling:
 		{
-			Pokemon& attacker = players[activePlayer]->GetCurPokemon();
+			Pokemon& attacker = m_Players[m_ActivePlayer]->GetCurPokemon();
 
 			if (!attacker.IsDead())
 			{
-				Pokemon& target = players[1 - activePlayer]->GetCurPokemon();
+				Pokemon& target = m_Players[1 - m_ActivePlayer]->GetCurPokemon();
 
-				moves[curMove]->Use(attacker, target);
-				std::cout << attacker.GetName() << " used " << curMove << std::endl;
-				std::cout << target.GetName() << " took " << moves[curMove]->GetDamage() << " damage." << std::endl;
+				m_Moves[m_CurMove]->Use(attacker, target);
+				std::cout << attacker.GetName() << " used " << m_CurMove << std::endl;
+				std::cout << target.GetName() << " took " << m_Moves[m_CurMove]->GetDamage() << " damage." << std::endl;
 				std::cout << target.GetName() << " has " << target.GetHP() << " HP left.\n" << std::endl;
 
 				ChangeActivePlayer();
 
-				state = menu;
+				m_State = menu;
 			}
 			else
 			{
 				std::cout << attacker.GetName() << " fainted...\n\n";
-				state = choosingPokemon;
+				m_State = choosingPokemon;
 			}
 		}
-			
 
 		break;
 		}
@@ -160,7 +159,7 @@ void BattleManager::GetUserInput()
 {
 	std::mt19937 rng(std::random_device {}());
 	
-	switch (state)
+	switch (m_State)
 	{
 	case menu:
 	{
@@ -172,14 +171,14 @@ void BattleManager::GetUserInput()
 			menuChoice = menuDist(rng);
 		} while (menuChoice < 1 && menuChoice > 2);
 
-		userInput = menuChoice;
+		m_UserInput = menuChoice;
 	}
 		
 	break;
 
 	case choosingMove:
 	{
-		const int numMoves = players[activePlayer]->GetCurPokemon().GetNumMoves();
+		const int numMoves = m_Players[m_ActivePlayer]->GetCurPokemon().GetNumMoves();
 		std::uniform_int_distribution<int> moveDist(0, numMoves - 1);
 		int moveChoice;
 
@@ -188,23 +187,23 @@ void BattleManager::GetUserInput()
 			moveChoice = moveDist(rng);
 		} while (moveChoice < 0 && moveChoice >(numMoves - 1));
 
-		userInput = moveChoice;
+		m_UserInput = moveChoice;
 	}
 			
 	break;
 
 	case choosingPokemon:
 	{
-		const int numPokemons = players[activePlayer]->GetNumPokemons();
+		const int numPokemons = m_Players[m_ActivePlayer]->GetNumPokemons();
 		std::uniform_int_distribution<int> pokemonDist(0, numPokemons - 1);
 		int pokemonChoice;
 
 		do
 		{
 			pokemonChoice = pokemonDist(rng);
-		} while ((pokemonChoice < 0 && pokemonChoice >= numPokemons) || players[activePlayer]->GetPokemon(pokemonChoice).IsDead());
+		} while ((pokemonChoice < 0 && pokemonChoice >= numPokemons) || m_Players[m_ActivePlayer]->GetPokemon(pokemonChoice).IsDead());
 
-		userInput = pokemonChoice;
+		m_UserInput = pokemonChoice;
 	}
 	
 	break;
@@ -213,14 +212,14 @@ void BattleManager::GetUserInput()
 
 void BattleManager::ChangeActivePlayer()
 {
-	if (activePlayer == player1)
+	if (m_ActivePlayer == player1)
 	{
-		activePlayer = player2;
+		m_ActivePlayer = player2;
 	}
 	else
 	{
-		activePlayer = player1;
+		m_ActivePlayer = player1;
 	}
 
-	std::cout << players[activePlayer]->GetName() << "s turn...\n" << std::endl;
+	std::cout << m_Players[m_ActivePlayer]->GetName() << "s turn...\n" << std::endl;
 }

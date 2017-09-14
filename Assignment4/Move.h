@@ -11,6 +11,6 @@ public:
 	int GetDamage() const;
 
 protected:
-	int damage;
-	char* name;
+	int m_Damage;
+	char* m_Name;
 };

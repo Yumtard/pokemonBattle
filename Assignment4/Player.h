@@ -12,17 +12,17 @@ public:
 	bool SwitchPokemon(int nextPokemon_in);
 	void AddPokemon(Pokemon* pokemon_in);
 	Pokemon& GetCurPokemon() const;
-	Pokemon& GetPokemon(int index) const;
+	Pokemon& GetPokemon(int index_in) const;
 	const char* GetName() const;
 	bool HasNotLost() const;
 	int GetNumPokemons() const;
 	bool IsAI() const;
 
 private:
-	char* name;
-	int numPokemons;
-	int curPokemon;
-	static constexpr int maxNumPokemons = 6;
-	Pokemon* pokemons[maxNumPokemons];
-	bool AI;
+	char* m_Name;
+	int m_NumPokemons;
+	int m_CurPokemon;
+	static constexpr int m_MaxNumPokemons = 6;
+	Pokemon* m_Pokemons[m_MaxNumPokemons];
+	bool m_AI;
 };

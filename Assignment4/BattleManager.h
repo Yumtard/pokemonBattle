@@ -28,10 +28,10 @@ private:
 	};
 
 private:
-	ActivePlayer activePlayer = player1;
-	BattleState state = menu;
-	Player *players[2];
-	std::map<std::string, Move*>  moves;
-	int userInput;
-	std::string curMove;
+	ActivePlayer m_ActivePlayer = player1;
+	BattleState m_State = menu;
+	Player *m_Players[2];
+	std::map<std::string, Move*> m_Moves;
+	int m_UserInput;
+	std::string m_CurMove;
 };

@@ -13,16 +13,16 @@ public:
 	void TakeDamage(int damage_in);
 	const std::string& GetInfo();
 	void AddMove(const std::string& move_in);
-	const std::string& GetMove(int choice) const;
+	const std::string& GetMove(int choice_in) const;
 	bool IsDead() const;
 	int GetNumMoves() const;
 	int GetHP() const;
 
 private:
-	char* name;
-	int hp;
-	int numMoves;
-	static constexpr int numMovesMax = 4;
-	std::string availableMoves[numMovesMax];
-	std::string info;
+	char* m_Name;
+	int m_hp;
+	int m_NumMoves;
+	static constexpr int m_NumMovesMax = 4;
+	std::string m_AvailableMoves[m_NumMovesMax];
+	std::string m_Info;
 };

@@ -2,68 +2,75 @@
 
 Player::Player(char* name_in, bool AI_in)
 	:
-	name(name_in),
-	AI(AI_in)
+	m_Name(name_in),
+	m_AI(AI_in)
 {
-	numPokemons = 0;
-	curPokemon = 0;
+	m_NumPokemons = 0;
+	m_CurPokemon = 0;
 }
 
 void Player::ViewPokemons()
 {
-	for (int i = 0; i < numPokemons; i++)
+	for (int i = 0; i < m_NumPokemons; i++)
 	{
-		std::cout << "(" << i << ") " << pokemons[i]->GetInfo() << std::endl;
+		if (m_Pokemons[i]->IsDead())
+		{
+			std::cout << "(DEAD) " << m_Pokemons[i]->GetName() << std::endl;
+		}
+		else
+		{
+			std::cout << "(" << i << ") " << m_Pokemons[i]->GetInfo() << std::endl;
+		}
 	}
 	std::cout << "\n";
 }
 
 bool Player::SwitchPokemon(int nextPokemon_in)
 {
-	if (curPokemon == nextPokemon_in)
+	if (m_CurPokemon == nextPokemon_in)
 	{
-		std::cout << name << " is sticking with " << pokemons[curPokemon]->GetName() << "\n" << std::endl;
+		std::cout << m_Name << " is sticking with " << m_Pokemons[m_CurPokemon]->GetName() << "\n" << std::endl;
 		return false;
 	}
 	
-	std::cout << name << ": " << pokemons[curPokemon]->GetName() << "! That's enough! Come back!" << std::endl;
+	std::cout << m_Name << ": " << m_Pokemons[m_CurPokemon]->GetName() << "! That's enough! Come back!" << std::endl;
 
-	curPokemon = nextPokemon_in;
+	m_CurPokemon = nextPokemon_in;
 
-	std::cout << name << " sent out " << pokemons[curPokemon]->GetName() << "\n" << std::endl;
+	std::cout << m_Name << " sent out " << m_Pokemons[m_CurPokemon]->GetName() << "\n" << std::endl;
 
 	return true;
 }
 
 void Player::AddPokemon(Pokemon* pokemon_in)
 {
-	if (numPokemons < maxNumPokemons)
+	if (m_NumPokemons < m_MaxNumPokemons)
 	{
-		pokemons[numPokemons] = pokemon_in;
-		numPokemons++;
+		m_Pokemons[m_NumPokemons] = pokemon_in;
+		m_NumPokemons++;
 	}
 }
 
 Pokemon & Player::GetCurPokemon() const
 {
-	return *pokemons[curPokemon];
+	return *m_Pokemons[m_CurPokemon];
 }
 
-Pokemon & Player::GetPokemon(int index) const
+Pokemon & Player::GetPokemon(int index_in) const
 {
-	return *pokemons[index];
+	return *m_Pokemons[index_in];
 }
 
 const char* Player::GetName() const
 {
-	return name;
+	return m_Name;
 }
 
 bool Player::HasNotLost() const
 {
-	for (int i = 0; i < numPokemons; i++)
+	for (int i = 0; i < m_NumPokemons; i++)
 	{
-		if (!pokemons[i]->IsDead())
+		if (!m_Pokemons[i]->IsDead())
 		{
 			return true;
 		}
@@ -73,10 +80,10 @@ bool Player::HasNotLost() const
 
 int Player::GetNumPokemons() const
 {
-	return numPokemons;
+	return m_NumPokemons;
 }
 
 bool Player::IsAI() const
 {
-	return AI;
+	return m_AI;
 }

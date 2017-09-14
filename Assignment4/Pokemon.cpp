@@ -2,67 +2,67 @@
 
 Pokemon::Pokemon(char* name_in, int hp_in)
 	:
-	name(name_in),
-	hp(hp_in),
-	numMoves(0)
+	m_Name(name_in),
+	m_hp(hp_in),
+	m_NumMoves(0)
 {}
 
 const char* Pokemon::GetName() const
 {
-	return name;
+	return m_Name;
 }
 
 void Pokemon::DisplayMoves() const
 {
-	for (int i = 0; i < numMoves; i++)
+	for (int i = 0; i < m_NumMoves; i++)
 	{
-		std::cout << "(" << i << ") " << availableMoves[i] << std::endl;
+		std::cout << "(" << i << ") " << m_AvailableMoves[i] << std::endl;
 	}
 	std::cout << "\n";
 }
 
 void Pokemon::TakeDamage(int damage_in)
 {
-	hp -= std::min(damage_in, hp);
+	m_hp -= std::min(damage_in, m_hp);
 }
 
 const std::string & Pokemon::GetInfo()
 {
 	std::string moves;
-	for (int i = 0; i < numMoves; i++)
+	for (int i = 0; i < m_NumMoves; i++)
 	{
-		moves += availableMoves[i] + ", ";
+		moves += m_AvailableMoves[i] + ", ";
 	}
-	std::string stringName(name);
-	info = stringName + ", HP: " + std::to_string(hp) + ", Moves: " + moves;
-	return info;
+	std::string stringName(m_Name);
+	m_Info = stringName + ", HP: " + std::to_string(m_hp) + ", Moves: " + moves;
+	return m_Info;
 }
 
 void Pokemon::AddMove(const std::string& move_in)
 {
-	if (numMoves < numMovesMax)
+	if (m_NumMoves < m_NumMovesMax)
 	{
-		availableMoves[numMoves] = move_in;
-		numMoves++;
+		m_AvailableMoves[m_NumMoves] = move_in;
+		m_NumMoves++;
 	}
 }
 
-const std::string& Pokemon::GetMove(int choice) const
+const std::string& Pokemon::GetMove(int choice_in) const
 {
-	return availableMoves[choice];
+	return m_AvailableMoves[choice_in];
 }
 
 bool Pokemon::IsDead() const
 {
-	return hp == 0;
+	return m_hp == 0;
 }
 
 int Pokemon::GetNumMoves() const
 {
-	return numMoves;
+	return m_NumMoves;
 }
 
 int Pokemon::GetHP() const
 {
-	return hp;
+	return m_hp;
 }
