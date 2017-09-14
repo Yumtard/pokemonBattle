@@ -9,6 +9,15 @@ Player::Player(char* name_in, bool AI_in)
 	m_CurPokemon = 0;
 }
 
+Player::~Player()
+{
+	for (int i = 0; i < m_NumPokemons; i++)
+	{
+		delete m_Pokemons[i];
+		m_Pokemons[i] = nullptr;
+	}
+}
+
 void Player::ViewPokemons()
 {
 	for (int i = 0; i < m_NumPokemons; i++)

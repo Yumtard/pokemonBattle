@@ -1,6 +1,6 @@
 #include "BattleManager.h"
 
-void BattleManager::Update()
+BattleManager::BattleManager()
 {
 	char* tackle = "Tackle";
 	char* leechLife = "Leech Life";
@@ -58,7 +58,26 @@ void BattleManager::Update()
 	m_Players[1] = new Player("Gary", false);
 	m_Players[1]->AddPokemon(bulbasaur);
 	m_Players[1]->AddPokemon(squirtle);
-	
+}
+
+BattleManager::~BattleManager()
+{
+	delete m_Players[0];
+	delete m_Players[1];
+
+	std::map<std::string, Move*>::iterator it = m_Moves.begin();
+	for (; it != m_Moves.end(); it++)
+	{
+		if (it != m_Moves.end())
+		{
+			delete it->second;
+			it->second = nullptr;
+		}
+	}
+}
+
+void BattleManager::Update()
+{
 	std::cout << m_Players[0]->GetName() << ": GO! " << m_Players[0]->GetCurPokemon().GetName() << "!" << std::endl;
 	std::cout << m_Players[1]->GetName() << ": GO! " << m_Players[1]->GetCurPokemon().GetName() << "!\n" << std::endl;
 
@@ -223,3 +242,4 @@ void BattleManager::ChangeActivePlayer()
 
 	std::cout << m_Players[m_ActivePlayer]->GetName() << "s turn...\n" << std::endl;
 }
+

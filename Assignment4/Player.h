@@ -8,6 +8,7 @@ class Player
 {
 public:
 	Player(char* name_in, bool AI_in);
+	~Player();
 	void ViewPokemons();
 	bool SwitchPokemon(int nextPokemon_in);
 	void AddPokemon(Pokemon* pokemon_in);

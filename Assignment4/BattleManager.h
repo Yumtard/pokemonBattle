@@ -12,7 +12,8 @@
 class BattleManager
 {
 public:
-	BattleManager() = default;
+	BattleManager();
+	~BattleManager();
 	void Update();
 	void GetUserInput();
 	void ChangeActivePlayer();
