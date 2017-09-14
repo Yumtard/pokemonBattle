@@ -62,66 +62,47 @@ void BattleManager::Update()
 				state = choosingPokemon;
 				break;
 			}
+			
+			std::cout << "Current Pokemon: " << players[activePlayer]->GetPokemon().GetName() << std::endl;
+			std::cout << "(1) Moves" << std::endl;
+			std::cout << "(2) Pokemons";
 
-			while (true)
+			GetUserInput();
+
+			if (userInput == 1)
 			{
-				GetUserInput();
-
-				if (userInput == 1)
-				{
-					state = choosingMove;
-					break;
-				}
-				else if (userInput == 2)
-				{
-					state = choosingPokemon;
-				}
-				else
-				{
-					std::cout << "Invalid choice" << std::endl; //detta kan göras i getuserinput
-					continue;
-				}
+				state = choosingMove;
+				break;
 			}
+			else if (userInput == 2)
+			{
+				state = choosingPokemon;
+				break;
+			}			
 
 			break;
+
 		case choosingPokemon:
 			std::cout << "Choose a pokemon" << std::endl;
-			//display pokemons
+			players[activePlayer]->ViewPokemons();
 
-			while (true)
-			{
-				GetUserInput();
-				if (userInput >= 0 && userInput <= 5) //less than numpokemons
-				{
-					//set curpokemon to daaat
-					state = menu;
-					break;
-				}
-				else
-				{
-					continue;
-				}
-			}
+			GetUserInput();
+
+			players[activePlayer]->SwitchPokemon(userInput);
+
+			state = menu;
 
 			break;
+
 		case choosingMove:
 			std::cout << "Choose move" << std::endl;
-			//display moves
+			players[activePlayer]->GetPokemon().DisplayMoves();
 
-			while (true)
-			{
-				GetUserInput();
-				if (userInput >= 0 && userInput <= 3) //less than num available moves
-				{
-					//set  cur move by getting string from pokemon
-					state = battling;
-					break;
-				}
-				else
-				{
-					continue;
-				}
-			}
+			GetUserInput();
+
+			curMove = players[activePlayer]->GetPokemon().GetMove(userInput);
+
+			state = battling;
 
 			break;
 		case battling:
@@ -149,22 +130,52 @@ void BattleManager::Update()
 void BattleManager::GetUserInput()
 {
 	std::mt19937 rng(std::random_device rd());
+	bool invalidInput = true;
 
-	switch (state)
+	while (invalidInput)
 	{
-	case menu:
-		std::uniform_int_distribution<int> dist(1, 2);
-		userInput = dist(rng);
-		break;
-		
-	case choosingMove:
-		std::uniform_int_distribution<int> dist(0, 3);
-		userInput = dist(rng);
-		break;
+		switch (state)
+		{
+		case menu:
+			std::uniform_int_distribution<int> dist(1, 2);
+			const int choice = dist(rng);
 
-	case choosingPokemon:
-		std::uniform_int_distribution<int> dist(0, 5);
-		userInput = dist(rng);
-		break;
+			if (choice > 0 && choice < 3)
+			{
+				invalidInput = false;
+				std::cout << "You chose " << choice << std::endl;
+				userInput = choice;
+			}
+
+			break;
+
+		case choosingMove:
+			const int numMoves = players[activePlayer]->GetPokemon().GetNumMoves();
+			std::uniform_int_distribution<int> dist(0, numMoves - 1);
+			const int choice = dist(rng);
+
+			if (choice >= 0 && choice < numMoves)
+			{
+				invalidInput = false;
+				std::cout << "You chose " << choice << std::endl;
+				userInput = choice;
+			}
+
+			break;
+
+		case choosingPokemon:
+			const int numPokemons = players[activePlayer]->GetNumPokemons();
+			std::uniform_int_distribution<int> dist(0, numPokemons - 1);
+			const int choice = dist(rng);
+
+			if (choice >= 0 && choice < numPokemons)
+			{
+				invalidInput = false;
+				std::cout << "You chose " << choice << std::endl;
+				userInput = choice;
+			}
+
+			break;
+		}
 	}
 }

@@ -46,3 +46,8 @@ bool Pokemon::IsDead() const
 {
 	return hp == 0;
 }
+
+int Pokemon::GetNumMoves() const
+{
+	return numMoves;
+}

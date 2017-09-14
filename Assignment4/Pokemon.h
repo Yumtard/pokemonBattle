@@ -15,6 +15,7 @@ public:
 	void AddMove(const std::string& move_in);
 	const std::string& GetMove(int choice) const;
 	bool IsDead() const;
+	int GetNumMoves() const;
 
 private:
 	std::string name;

@@ -54,3 +54,8 @@ bool Player::HasLost() const
 	}
 	return true;
 }
+
+int Player::GetNumPokemons() const
+{
+	return numPokemons;
+}

@@ -14,6 +14,7 @@ public:
 	Pokemon& GetPokemon();
 	const std::string& GetName() const;
 	bool HasLost() const;
+	int GetNumPokemons() const;
 
 private:
 	std::string name;
