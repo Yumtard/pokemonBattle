@@ -2,46 +2,56 @@
 
 void BattleManager::Update()
 {
-	//create moves
-	// create pokemons
-	//give pokemons moves
-	//create players
-	//give players pokemons
+	std::string tackle = "Tackle";
+	std::string leechLife = "Leech Life";
+	std::string thunderShock = "Thunder Shock";
+	std::string fireBlast = "Fire Blast";
+	std::string ember = "Ember";
+	std::string waterGun = "Water Gun";
+	std::string slam = "Slam";
+	std::string quickAttack = "Quick Attack";
+	std::string scratch = "Scratch";
 
-	moves["Tackle"] = new DamagingMove("Tackle", 10);
-	moves["Leech Life"] = new AbsorbingMove("Leech Life", 8);
-	moves["Thunder Shock"] = new DamagingMove("Thunder Shock", 12);
-	moves["Fire Blast"] = new DamagingMove("Fire Blast", 15);
-	moves["Ember"] = new DamagingMove("Ember", 10);
-	moves["Water Gun"] = new DamagingMove("Water Gun", 10);
-	moves["Slam"] = new DamagingMove("Slam", 12);
-	moves["Quick Attack"] = new DamagingMove("Quick Attack", 10);
-	moves["Scratch"] = new DamagingMove("Scratch", 12);
+	moves[tackle] = new DamagingMove(tackle, 10);
+	moves[leechLife] = new AbsorbingMove(leechLife, 8);
+	moves[thunderShock] = new DamagingMove(thunderShock, 12);
+	moves[fireBlast] = new DamagingMove(fireBlast, 15);
+	moves[ember] = new DamagingMove(ember, 10);
+	moves[waterGun] = new DamagingMove(waterGun, 10);
+	moves[slam] = new DamagingMove(slam, 12);
+	moves[quickAttack] = new DamagingMove(quickAttack, 10);
+	moves[scratch] = new DamagingMove(scratch, 12);
 
-	Pokemon* pikachu = new Pokemon("Pikachu", 20);
-	Pokemon* charmander = new Pokemon("Charmander", 20);
-	Pokemon* bulbasaur = new Pokemon("Bulbasaur", 20);
-	Pokemon* squirtle = new Pokemon("Squirtle", 20);
+	std::string pikachuName = "Pikachu";
+	std::string charmanderName = "Charmander";
+	std::string bulbasaurName = "Bulbasaur";
+	std::string squirtleName = "Squirtle";
+	Pokemon* pikachu = new Pokemon(pikachuName, 20);
+	Pokemon* charmander = new Pokemon(charmanderName, 20);
+	Pokemon* bulbasaur = new Pokemon(bulbasaurName, 20);
+	Pokemon* squirtle = new Pokemon(squirtleName, 20);
 
-	pikachu->AddMove("Tackle");
-	pikachu->AddMove("Thunder Shock");
-	pikachu->AddMove("Slam");
-	pikachu->AddMove("Quick Attack");
+	pikachu->AddMove(tackle);
+	pikachu->AddMove(thunderShock);
+	pikachu->AddMove(slam);
+	pikachu->AddMove(quickAttack);
 
-	charmander->AddMove("Tackle");
-	charmander->AddMove("Scratch");
-	charmander->AddMove("Ember");
-	charmander->AddMove("Fire Blast");
+	charmander->AddMove(tackle);
+	charmander->AddMove(scratch);
+	charmander->AddMove(ember);
+	charmander->AddMove(fireBlast);
 
-	bulbasaur->AddMove("Tackle");
-	bulbasaur->AddMove("Leech Life");
-	bulbasaur->AddMove("Slam");
-	bulbasaur->AddMove("Scratch");
+	bulbasaur->AddMove(tackle);
+	bulbasaur->AddMove(leechLife);
+	bulbasaur->AddMove(slam);
+	bulbasaur->AddMove(scratch);
 
-	squirtle->AddMove("Tackle");
-	squirtle->AddMove("Scratch");
-	squirtle->AddMove("Water Gun");
-	squirtle->AddMove("Scratch");
+	squirtle->AddMove(tackle);
+	squirtle->AddMove(scratch);
+	squirtle->AddMove(waterGun);
+	squirtle->AddMove(slam);
+
+	std::cout << "This worked?" << std::endl;
 
 	players[0] = new Player("Ash");
 	players[0]->AddPokemon(pikachu);
@@ -129,50 +139,51 @@ void BattleManager::Update()
 
 void BattleManager::GetUserInput()
 {
-	std::mt19937 rng(std::random_device rd());
+	const int numPokemons = players[activePlayer]->GetNumPokemons();
+	const int numMoves = players[activePlayer]->GetPokemon().GetNumMoves();
+
+	std::mt19937 rng(std::random_device {}());
 	bool invalidInput = true;
+
+	std::uniform_int_distribution<int> menuDist(1, 2);
+	const int menuChoice = menuDist(rng);
+
+	std::uniform_int_distribution<int> moveDist(0, numMoves - 1);
+	const int moveChoice = moveDist(rng);
+
+	std::uniform_int_distribution<int> pokemonDist(0, numPokemons - 1);
+	const int pokemonChoice = pokemonDist(rng);
 
 	while (invalidInput)
 	{
 		switch (state)
 		{
 		case menu:
-			std::uniform_int_distribution<int> dist(1, 2);
-			const int choice = dist(rng);
-
-			if (choice > 0 && choice < 3)
+			if (menuChoice > 0 && menuChoice < 3)
 			{
 				invalidInput = false;
-				std::cout << "You chose " << choice << std::endl;
-				userInput = choice;
+				std::cout << "You chose " << menuChoice << std::endl;
+				userInput = menuChoice;
 			}
 
 			break;
 
 		case choosingMove:
-			const int numMoves = players[activePlayer]->GetPokemon().GetNumMoves();
-			std::uniform_int_distribution<int> dist(0, numMoves - 1);
-			const int choice = dist(rng);
-
-			if (choice >= 0 && choice < numMoves)
+			if (moveChoice >= 0 && moveChoice < numMoves)
 			{
 				invalidInput = false;
-				std::cout << "You chose " << choice << std::endl;
-				userInput = choice;
+				std::cout << "You chose " << moveChoice << std::endl;
+				userInput = moveChoice;
 			}
 
 			break;
 
 		case choosingPokemon:
-			const int numPokemons = players[activePlayer]->GetNumPokemons();
-			std::uniform_int_distribution<int> dist(0, numPokemons - 1);
-			const int choice = dist(rng);
-
-			if (choice >= 0 && choice < numPokemons)
+			if (pokemonChoice >= 0 && pokemonChoice < numPokemons)
 			{
 				invalidInput = false;
-				std::cout << "You chose " << choice << std::endl;
-				userInput = choice;
+				std::cout << "You chose " << pokemonChoice << std::endl;
+				userInput = pokemonChoice;
 			}
 
 			break;

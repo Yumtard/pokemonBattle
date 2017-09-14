@@ -11,7 +11,7 @@ public:
 	const std::string& GetName() const;
 	void DisplayMoves() const;
 	void TakeDamage(int damage_in);
-	const std::string& GetInfo() const;
+	const std::string& GetInfo();
 	void AddMove(const std::string& move_in);
 	const std::string& GetMove(int choice) const;
 	bool IsDead() const;
@@ -23,4 +23,5 @@ private:
 	int numMoves;
 	static constexpr int numMovesMax = 4;
 	std::string* availableMoves[numMovesMax];
+	std::string info;
 };

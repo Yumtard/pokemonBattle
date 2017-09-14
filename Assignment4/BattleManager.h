@@ -12,7 +12,7 @@
 class BattleManager
 {
 public:
-	BattleManager();
+	BattleManager() = default;
 	void Update();
 	void GetUserInput();
 
