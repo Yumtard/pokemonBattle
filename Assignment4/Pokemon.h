@@ -2,11 +2,12 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 class Pokemon
 {
 public:
-	Pokemon(std::string name_in, int hp_in);
+	Pokemon(const std::string& name_in, int hp_in);
 	const std::string& GetName() const;
 	void DisplayMoves() const;
 	void TakeDamage(int damage_in);
@@ -20,5 +21,5 @@ private:
 	int hp;
 	int numMoves;
 	static constexpr int numMovesMax = 4;
-	std::string availAbleMoves[numMovesMax];
+	std::string* availableMoves[numMovesMax];
 };

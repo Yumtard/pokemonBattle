@@ -95,3 +95,26 @@ void BattleManager::Update()
 		}
 	}
 }
+
+void BattleManager::GetUserInput()
+{
+	std::mt19937 rng(std::random_device rd());
+
+	switch (state)
+	{
+	case menu:
+		std::uniform_int_distribution<int> dist(1, 2);
+		userInput = dist(rng);
+		break;
+		
+	case choosingMove:
+		std::uniform_int_distribution<int> dist(0, 3);
+		userInput = dist(rng);
+		break;
+
+	case choosingPokemon:
+		std::uniform_int_distribution<int> dist(0, 5);
+		userInput = dist(rng);
+		break;
+	}
+}
