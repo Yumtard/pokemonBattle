@@ -2,6 +2,9 @@
 
 #include "Player.h"
 #include "Move.h"
+#include "DamagingMove.h"
+#include "AbsorbingMove.h"
+#include "Pokemon.h"
 #include <map>
 #include <string>
 #include <random>

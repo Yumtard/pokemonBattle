@@ -2,6 +2,56 @@
 
 void BattleManager::Update()
 {
+	//create moves
+	// create pokemons
+	//give pokemons moves
+	//create players
+	//give players pokemons
+
+	moves["Tackle"] = new DamagingMove("Tackle", 10);
+	moves["Leech Life"] = new AbsorbingMove("Leech Life", 8);
+	moves["Thunder Shock"] = new DamagingMove("Thunder Shock", 12);
+	moves["Fire Blast"] = new DamagingMove("Fire Blast", 15);
+	moves["Ember"] = new DamagingMove("Ember", 10);
+	moves["Water Gun"] = new DamagingMove("Water Gun", 10);
+	moves["Slam"] = new DamagingMove("Slam", 12);
+	moves["Quick Attack"] = new DamagingMove("Quick Attack", 10);
+	moves["Scratch"] = new DamagingMove("Scratch", 12);
+
+	Pokemon* pikachu = new Pokemon("Pikachu", 20);
+	Pokemon* charmander = new Pokemon("Charmander", 20);
+	Pokemon* bulbasaur = new Pokemon("Bulbasaur", 20);
+	Pokemon* squirtle = new Pokemon("Squirtle", 20);
+
+	pikachu->AddMove("Tackle");
+	pikachu->AddMove("Thunder Shock");
+	pikachu->AddMove("Slam");
+	pikachu->AddMove("Quick Attack");
+
+	charmander->AddMove("Tackle");
+	charmander->AddMove("Scratch");
+	charmander->AddMove("Ember");
+	charmander->AddMove("Fire Blast");
+
+	bulbasaur->AddMove("Tackle");
+	bulbasaur->AddMove("Leech Life");
+	bulbasaur->AddMove("Slam");
+	bulbasaur->AddMove("Scratch");
+
+	squirtle->AddMove("Tackle");
+	squirtle->AddMove("Scratch");
+	squirtle->AddMove("Water Gun");
+	squirtle->AddMove("Scratch");
+
+	players[0] = new Player("Ash");
+	players[0]->AddPokemon(pikachu);
+	players[0]->AddPokemon(charmander);
+
+	players[1] = new Player("Gary");
+	players[1]->AddPokemon(bulbasaur);
+	players[1]->AddPokemon(squirtle);
+	
+
 	while(!players[activePlayer]->HasLost() || !players[1 - activePlayer]->HasLost())
 	{
 		switch (state)

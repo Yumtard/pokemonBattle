@@ -24,11 +24,11 @@ void Player::SwitchPokemon(int curPokemon_in)
 	}
 }
 
-void Player::AddPokemon(const std::string & pokemonName_in, int hp_in, std::string * move_in)
+void Player::AddPokemon(Pokemon* pokemon_in)
 {
 	if (numPokemons < maxNumPokemons)
 	{
-		pokemons[numPokemons] = new Pokemon(pokemonName_in, hp_in, move_in);
+		pokemons[numPokemons] = pokemon_in;
 		numPokemons++;
 	}
 }
