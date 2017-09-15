@@ -6,4 +6,6 @@ WaterGun 11
 Slam 12
 QuickAttack 10
 Scratch 10
+MegaKick 14
+KarateChop 12
 

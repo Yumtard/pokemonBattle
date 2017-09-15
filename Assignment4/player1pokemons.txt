@@ -1,2 +1,3 @@
 Pikachu Tackle ThunderShock Slam QuickAttack 20
 Charmander Tackle Scratch Ember FireBlast 20
+Zubat Tackle LeechLife Absorb Drain 15

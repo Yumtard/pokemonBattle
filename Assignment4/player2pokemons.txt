@@ -1,2 +1,3 @@
 Bulbasaur LeechLife Absorb Slam Scratch 20
 Squirtle Tackle Scratch WaterGun Slam 20
+Hitmonlee MegaKick KarateChop Slam Tackle 25
