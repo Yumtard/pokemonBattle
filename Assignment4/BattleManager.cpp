@@ -83,19 +83,6 @@ void BattleManager::Update()
 
 	while(m_Player->HasNotLost() && m_AI->HasNotLost())
 	{
-		if (m_Player->GetHasAttacked() && m_AI->GetHasAttacked())
-		{
-			m_State = menu;
-			m_Player->SetHasAttacked(false);
-			m_AI->SetHasAttacked(false);
-		}
-
-		if (m_Player->GetCurPokemon().IsDead())
-		{
-			m_ForcedSwitch = true;
-			m_State = choosingPokemon;
-		}
-
 		switch (m_State)
 		{
 		case menu:
@@ -133,6 +120,7 @@ void BattleManager::Update()
 
 		HandleUserInput();
 		ProcessAI();
+		HandleStates();
 	}	
 
 	if (m_Player->HasNotLost())
@@ -159,14 +147,7 @@ void BattleManager::HandleUserInput()
 				std::cin >> menuChoice;
 			} while (menuChoice < 1 || menuChoice > 2);
 
-			if (menuChoice == 1)
-			{
-				m_State = choosingMove;
-			}
-			else
-			{
-				m_State = choosingPokemon;
-			}
+			m_UserInput = menuChoice;
 		}
 
 		break;
@@ -182,7 +163,6 @@ void BattleManager::HandleUserInput()
 			} while (moveChoice < 0 || moveChoice >(numMoves - 1));
 
 			m_Player->GetCurPokemon().SetNextMove(moveChoice);
-			m_State = battling;
 		}
 
 		break;
@@ -197,22 +177,9 @@ void BattleManager::HandleUserInput()
 				std::cin >> pokemonChoice;
 			} while ((pokemonChoice < 0 || pokemonChoice >= numPokemons) || m_Player->GetPokemon(pokemonChoice).IsDead());
 
-			if (m_Player->SwitchPokemon(pokemonChoice))
+			if (!m_Player->SwitchPokemon(pokemonChoice))
 			{
-				if (m_ForcedSwitch)
-				{
-					m_State = menu;
-					m_ForcedSwitch = false;
-				}
-				else
-				{
-					m_Player->SetHasAttacked(true);
-					m_State = battling;
-				}
-			}
-			else
-			{
-				m_State = menu;
+				m_ForcedSwitch = true;
 			}
 		}
 
@@ -272,6 +239,59 @@ void BattleManager::Battle(Player * attacker_in, Player * target_in)
 		if (target.IsDead())
 		{
 			std::cout << target.GetName() << " fainted...\n\n";
+		}
+	}
+}
+
+void BattleManager::HandleStates()
+{
+	if (m_Player->GetCurPokemon().IsDead())
+	{
+		m_ForcedSwitch = true;
+		m_State = choosingPokemon;
+		return;
+	}
+
+	if (m_Player->GetHasAttacked() && m_AI->GetHasAttacked())
+	{
+		m_State = menu;
+		m_Player->SetHasAttacked(false);
+		m_AI->SetHasAttacked(false);
+		return;
+	}
+
+	if (m_State == menu)
+	{
+		if (m_UserInput == 1)
+		{
+			m_State = choosingMove;
+		}
+		else if(m_UserInput == 2)
+		{
+			m_State = choosingPokemon;
+		}
+		return;
+	}
+
+	if (m_State == choosingMove)
+	{
+		m_State = battling;
+		return;
+	}
+
+	if (m_State == choosingPokemon)
+	{
+		if (m_ForcedSwitch)
+		{
+			m_State = menu;
+			m_ForcedSwitch = false;
+			return;
+		}
+		else
+		{
+			m_Player->SetHasAttacked(true);
+			m_State = battling;
+			return;
 		}
 	}
 }

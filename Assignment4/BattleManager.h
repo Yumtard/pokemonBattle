@@ -18,6 +18,7 @@ public:
 	void HandleUserInput();
 	void ProcessAI();
 	void Battle(Player* attacker_in, Player* target_in);
+	void HandleStates();
 
 private:
 	enum BattleState
