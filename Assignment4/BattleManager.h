@@ -17,6 +17,7 @@ public:
 	void Update();
 	void GetUserInput();
 	void ChangeActivePlayer();
+	void GetInput(); //user and ai.....
 
 private:
 	enum ActivePlayer
@@ -35,5 +36,4 @@ private:
 	std::map<std::string, Move*> m_Moves;
 	int m_UserInput;
 	std::string m_CurMove;
-	int numMovesLoaded;
 };

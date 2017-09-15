@@ -243,3 +243,7 @@ void BattleManager::ChangeActivePlayer()
 	std::cout << m_Players[m_ActivePlayer]->GetName() << "s turn...\n" << std::endl;
 }
 
+void BattleManager::GetInput()
+{
+}
+
