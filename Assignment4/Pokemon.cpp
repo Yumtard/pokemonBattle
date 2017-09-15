@@ -47,9 +47,9 @@ void Pokemon::AddMove(const std::string& move_in)
 	}
 }
 
-const std::string& Pokemon::GetMove(int choice_in) const
+const std::string& Pokemon::GetMove() const
 {
-	return m_AvailableMoves[choice_in];
+	return m_AvailableMoves[m_NextMove];
 }
 
 bool Pokemon::IsDead() const
@@ -65,4 +65,9 @@ int Pokemon::GetNumMoves() const
 int Pokemon::GetHP() const
 {
 	return m_hp;
+}
+
+void Pokemon::SetNextMove(int nextMove_in)
+{
+	m_NextMove = nextMove_in;
 }

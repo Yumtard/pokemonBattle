@@ -17,7 +17,7 @@ public:
 	void Update();
 	void GetUserInput();
 	void ChangeActivePlayer();
-	void GetInput(); //user and ai.....
+	void ProcessAI(); //user and ai.....
 
 private:
 	enum ActivePlayer
@@ -36,4 +36,6 @@ private:
 	std::map<std::string, Move*> m_Moves;
 	int m_UserInput;
 	std::string m_CurMove;
+	int numAttacks = 0; //änra namn
+	bool m_ForcedSwitch = false;
 };

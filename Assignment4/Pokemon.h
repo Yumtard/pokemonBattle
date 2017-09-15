@@ -13,10 +13,11 @@ public:
 	void TakeDamage(int damage_in);
 	const std::string& GetInfo();
 	void AddMove(const std::string& move_in);
-	const std::string& GetMove(int choice_in) const;
+	const std::string& GetMove() const; 
 	bool IsDead() const;
 	int GetNumMoves() const;
 	int GetHP() const;
+	void SetNextMove(int nextMove_in);
 
 private:
 	char* m_Name;
@@ -25,4 +26,5 @@ private:
 	static constexpr int m_NumMovesMax = 4;
 	std::string m_AvailableMoves[m_NumMovesMax];
 	std::string m_Info;
+	int m_NextMove;
 };
