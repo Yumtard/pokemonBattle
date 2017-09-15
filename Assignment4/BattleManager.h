@@ -16,7 +16,7 @@ public:
 	~BattleManager();
 	void Update();
 	void HandleUserInput();
-	void ProcessAI(); //user and ai.....
+	void ProcessAI();
 	void Battle(Player* attacker_in, Player* target_in);
 
 private:

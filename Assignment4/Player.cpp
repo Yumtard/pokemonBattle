@@ -1,9 +1,8 @@
 #include "Player.h"
 
-Player::Player(char* name_in, bool AI_in)
+Player::Player(char* name_in)
 	:
-	m_Name(name_in),
-	m_AI(AI_in)
+	m_Name(name_in)
 {
 	m_NumPokemons = 0;
 	m_CurPokemon = 0;
@@ -94,11 +93,11 @@ int Player::GetNumPokemons() const
 
 bool Player::GetHasAttacked() const
 {
-	return hasAttacked;
+	return m_HasAttacked;
 }
 
 void Player::SetHasAttacked(bool attacked_in)
 {
-	hasAttacked = attacked_in;
+	m_HasAttacked = attacked_in;
 }
 

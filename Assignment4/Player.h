@@ -7,7 +7,7 @@
 class Player
 {
 public:
-	Player(char* name_in, bool AI_in);
+	Player(char* name_in);
 	~Player();
 	void ViewPokemons();
 	bool SwitchPokemon(int nextPokemon_in);
@@ -26,6 +26,5 @@ private:
 	int m_CurPokemon;
 	static constexpr int m_MaxNumPokemons = 6;
 	Pokemon* m_Pokemons[m_MaxNumPokemons];
-	bool m_AI;
-	bool hasAttacked = false;
+	bool m_HasAttacked = false;
 };

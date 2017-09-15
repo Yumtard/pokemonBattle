@@ -26,10 +26,10 @@ BattleManager::BattleManager()
 	char* charmanderName = "Charmander";
 	char* bulbasaurName = "Bulbasaur";
 	char* squirtleName = "Squirtle";
-	Pokemon* pikachu = new Pokemon(pikachuName, 10);
-	Pokemon* charmander = new Pokemon(charmanderName, 10);
-	Pokemon* bulbasaur = new Pokemon(bulbasaurName, 10);
-	Pokemon* squirtle = new Pokemon(squirtleName, 10);
+	Pokemon* pikachu = new Pokemon(pikachuName, 20);
+	Pokemon* charmander = new Pokemon(charmanderName, 20);
+	Pokemon* bulbasaur = new Pokemon(bulbasaurName, 20);
+	Pokemon* squirtle = new Pokemon(squirtleName, 20);
 
 	pikachu->AddMove(tackle);
 	pikachu->AddMove(thunderShock);
@@ -51,11 +51,11 @@ BattleManager::BattleManager()
 	squirtle->AddMove(waterGun);
 	squirtle->AddMove(slam);
 
-	m_Player = new Player("Ash", false);
+	m_Player = new Player("Ash");
 	m_Player->AddPokemon(pikachu);
 	m_Player->AddPokemon(charmander);
 
-	m_AI = new Player("Gary", true);
+	m_AI = new Player("Gary");
 	m_AI->AddPokemon(bulbasaur);
 	m_AI->AddPokemon(squirtle);
 }
