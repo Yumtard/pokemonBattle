@@ -17,7 +17,8 @@ public:
 	const char* GetName() const;
 	bool HasNotLost() const;
 	int GetNumPokemons() const;
-	bool IsAI() const;
+	bool GetHasAttacked() const;
+	void SetHasAttacked(bool attacked_in);
 
 private:
 	char* m_Name;
@@ -26,4 +27,5 @@ private:
 	static constexpr int m_MaxNumPokemons = 6;
 	Pokemon* m_Pokemons[m_MaxNumPokemons];
 	bool m_AI;
+	bool hasAttacked = false;
 };

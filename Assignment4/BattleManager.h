@@ -15,27 +15,22 @@ public:
 	BattleManager();
 	~BattleManager();
 	void Update();
-	void GetUserInput();
-	void ChangeActivePlayer();
+	void HandleUserInput();
 	void ProcessAI(); //user and ai.....
+	void Battle(Player* attacker_in, Player* target_in);
 
 private:
-	enum ActivePlayer
-	{
-		player1, player2
-	};
 	enum BattleState
 	{
 		menu, battling, choosingPokemon, choosingMove
 	};
 
 private:
-	ActivePlayer m_ActivePlayer = player1;
 	BattleState m_State = menu;
-	Player *m_Players[2];
+	Player* m_Player;
+	Player* m_AI;
 	std::map<std::string, Move*> m_Moves;
 	int m_UserInput;
 	std::string m_CurMove;
-	int numAttacks = 0; //änra namn
 	bool m_ForcedSwitch = false;
 };

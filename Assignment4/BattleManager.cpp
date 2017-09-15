@@ -26,10 +26,10 @@ BattleManager::BattleManager()
 	char* charmanderName = "Charmander";
 	char* bulbasaurName = "Bulbasaur";
 	char* squirtleName = "Squirtle";
-	Pokemon* pikachu = new Pokemon(pikachuName, 20);
-	Pokemon* charmander = new Pokemon(charmanderName, 20);
-	Pokemon* bulbasaur = new Pokemon(bulbasaurName, 20);
-	Pokemon* squirtle = new Pokemon(squirtleName, 20);
+	Pokemon* pikachu = new Pokemon(pikachuName, 10);
+	Pokemon* charmander = new Pokemon(charmanderName, 10);
+	Pokemon* bulbasaur = new Pokemon(bulbasaurName, 10);
+	Pokemon* squirtle = new Pokemon(squirtleName, 10);
 
 	pikachu->AddMove(tackle);
 	pikachu->AddMove(thunderShock);
@@ -51,19 +51,19 @@ BattleManager::BattleManager()
 	squirtle->AddMove(waterGun);
 	squirtle->AddMove(slam);
 
-	m_Players[0] = new Player("Ash", false);
-	m_Players[0]->AddPokemon(pikachu);
-	m_Players[0]->AddPokemon(charmander);
+	m_Player = new Player("Ash", false);
+	m_Player->AddPokemon(pikachu);
+	m_Player->AddPokemon(charmander);
 
-	m_Players[1] = new Player("Gary", true);
-	m_Players[1]->AddPokemon(bulbasaur);
-	m_Players[1]->AddPokemon(squirtle);
+	m_AI = new Player("Gary", true);
+	m_AI->AddPokemon(bulbasaur);
+	m_AI->AddPokemon(squirtle);
 }
 
 BattleManager::~BattleManager()
 {
-	delete m_Players[0];
-	delete m_Players[1];
+	delete m_Player;
+	delete m_AI;
 
 	std::map<std::string, Move*>::iterator it = m_Moves.begin();
 	for (; it != m_Moves.end(); it++)
@@ -78,12 +78,19 @@ BattleManager::~BattleManager()
 
 void BattleManager::Update()
 {
-	std::cout << m_Players[0]->GetName() << ": GO! " << m_Players[0]->GetCurPokemon().GetName() << "!" << std::endl;
-	std::cout << m_Players[1]->GetName() << ": GO! " << m_Players[1]->GetCurPokemon().GetName() << "!\n" << std::endl;
+	std::cout << m_Player->GetName() << ": GO! " << m_Player->GetCurPokemon().GetName() << "!" << std::endl;
+	std::cout << m_AI->GetName() << ": GO! " << m_AI->GetCurPokemon().GetName() << "!\n" << std::endl;
 
-	while(m_Players[m_ActivePlayer]->HasNotLost() && m_Players[1 - m_ActivePlayer]->HasNotLost())
+	while(m_Player->HasNotLost() && m_AI->HasNotLost())
 	{
-		if (m_Players[m_ActivePlayer]->GetCurPokemon().IsDead() && !m_Players[m_ActivePlayer]->IsAI())
+		if (m_Player->GetHasAttacked() && m_AI->GetHasAttacked())
+		{
+			m_State = menu;
+			m_Player->SetHasAttacked(false);
+			m_AI->SetHasAttacked(false);
+		}
+
+		if (m_Player->GetCurPokemon().IsDead())
 		{
 			m_ForcedSwitch = true;
 			m_State = choosingPokemon;
@@ -93,127 +100,53 @@ void BattleManager::Update()
 		{
 		case menu:
 		{
-			if (!m_Players[m_ActivePlayer]->IsAI())
-			{
-				std::cout << "(1) Moves" << std::endl;
-				std::cout << "(2) Pokemons\n" << std::endl;
-
-				GetUserInput();
-
-				if (m_UserInput == 1)
-				{
-					m_State = choosingMove;
-					break;
-				}
-				else if (m_UserInput == 2)
-				{
-					m_State = choosingPokemon;
-					break;
-				}
-			}
-			else
-			{
-				ProcessAI();
-				m_State = battling;
-			}
-		}	
+			std::cout << "(1) Moves" << std::endl;
+			std::cout << "(2) Pokemons\n" << std::endl;
+		}
 
 		break;
 
 		case choosingPokemon:
 		{
-			if (!m_Players[m_ActivePlayer]->IsAI())
-			{
-				std::cout << "Choose a pokemon" << std::endl;
-				m_Players[m_ActivePlayer]->ViewPokemons();
-
-				GetUserInput();
-
-				if (m_Players[m_ActivePlayer]->SwitchPokemon(m_UserInput) && !m_ForcedSwitch)
-				{
-					m_ForcedSwitch = false;
-					numAttacks++;
-					ChangeActivePlayer();
-					m_State = battling;
-				}
-				else if (m_ForcedSwitch)
-				{
-					m_State = menu;
-				}
-			}
-			else
-			{
-				ProcessAI();
-				m_State = battling;
-			}
+			std::cout << "Choose a pokemon" << std::endl;
+			m_Player->ViewPokemons();
 		}
 
 		break;
 
 		case choosingMove:
 		{
-			if (!m_Players[m_ActivePlayer]->IsAI())
-			{
-				Pokemon& curPokemon = m_Players[m_ActivePlayer]->GetCurPokemon();
-				std::cout << "Choose move" << std::endl;
-				curPokemon.DisplayMoves();
-
-				GetUserInput();
-				curPokemon.SetNextMove(m_UserInput);
-
-				ChangeActivePlayer();
-				ProcessAI();
-				ChangeActivePlayer();
-				m_State = battling;
-			} ////else?
+			Pokemon& curPokemon = m_Player->GetCurPokemon();
+			std::cout << "Choose move" << std::endl;
+			curPokemon.DisplayMoves();
 		}
-			
+
 		break;
 
 		case battling:
-		{
-			if (numAttacks < 2)
-			{
-				Pokemon& attacker = m_Players[m_ActivePlayer]->GetCurPokemon();
-				m_CurMove = attacker.GetMove();
-
-				if (!attacker.IsDead())
-				{
-					numAttacks++;
-					Pokemon& target = m_Players[1 - m_ActivePlayer]->GetCurPokemon();
-					std::cout << attacker.GetName() << " used " << m_CurMove << std::endl;
-					m_Moves[m_CurMove]->Use(attacker, target);
-					std::cout << target.GetName() << " took " << m_Moves[m_CurMove]->GetDamage() << " damage." << std::endl;
-					std::cout << target.GetName() << " has " << target.GetHP() << " HP left.\n" << std::endl;
-
-					if (target.IsDead())
-					{
-						std::cout << target.GetName() << " fainted...\n\n";
-					}
 		
-					ChangeActivePlayer();
-				}
-				else
-				{
-					m_ForcedSwitch = true;
-					m_State = choosingPokemon;
-				}
-			}
-			else
-			{
-				numAttacks = 0;
-				m_State = menu;
-			}
-		}
+			Battle(m_Player, m_AI);
+			Battle(m_AI, m_Player);
 
 		break;
 		}
+
+		HandleUserInput();
+		ProcessAI();
+	}	
+
+	if (m_Player->HasNotLost())
+	{
+		std::cout << m_Player->GetName() << " has defeated " << m_AI->GetName() << "!!" << std::endl;
+	}
+	else
+	{
+		std::cout << m_AI->GetName() << " has defeated " << m_Player->GetName() << "!!" << std::endl;
 	}
 }
 
-void BattleManager::GetUserInput()
+void BattleManager::HandleUserInput()
 {
-	if (!m_Players[m_ActivePlayer]->IsAI())
 	{
 		switch (m_State)
 		{
@@ -226,14 +159,21 @@ void BattleManager::GetUserInput()
 				std::cin >> menuChoice;
 			} while (menuChoice < 1 || menuChoice > 2);
 
-			m_UserInput = menuChoice;
+			if (menuChoice == 1)
+			{
+				m_State = choosingMove;
+			}
+			else
+			{
+				m_State = choosingPokemon;
+			}
 		}
 
 		break;
 
 		case choosingMove:
 		{
-			const int numMoves = m_Players[m_ActivePlayer]->GetCurPokemon().GetNumMoves();
+			const int numMoves = m_Player->GetCurPokemon().GetNumMoves();
 			int moveChoice;
 
 			do
@@ -241,22 +181,39 @@ void BattleManager::GetUserInput()
 				std::cin >> moveChoice;
 			} while (moveChoice < 0 || moveChoice >(numMoves - 1));
 
-			m_UserInput = moveChoice;
+			m_Player->GetCurPokemon().SetNextMove(moveChoice);
+			m_State = battling;
 		}
 
 		break;
 
 		case choosingPokemon:
 		{
-			const int numPokemons = m_Players[m_ActivePlayer]->GetNumPokemons();
+			const int numPokemons = m_Player->GetNumPokemons();
 			int pokemonChoice;
 
 			do
 			{
 				std::cin >> pokemonChoice;
-			} while ((pokemonChoice < 0 || pokemonChoice >= numPokemons) || m_Players[m_ActivePlayer]->GetPokemon(pokemonChoice).IsDead());
+			} while ((pokemonChoice < 0 || pokemonChoice >= numPokemons) || m_Player->GetPokemon(pokemonChoice).IsDead());
 
-			m_UserInput = pokemonChoice;
+			if (m_Player->SwitchPokemon(pokemonChoice))
+			{
+				if (m_ForcedSwitch)
+				{
+					m_State = menu;
+					m_ForcedSwitch = false;
+				}
+				else
+				{
+					m_Player->SetHasAttacked(true);
+					m_State = battling;
+				}
+			}
+			else
+			{
+				m_State = menu;
+			}
 		}
 
 		break;
@@ -264,41 +221,27 @@ void BattleManager::GetUserInput()
 	}
 }
 
-void BattleManager::ChangeActivePlayer()
-{
-	if (m_ActivePlayer == player1)
-	{
-		m_ActivePlayer = player2;
-	}
-	else
-	{
-		m_ActivePlayer = player1;
-	}
-
-	std::cout << m_Players[m_ActivePlayer]->GetName() << "s turn...\n" << std::endl; 
-}
-
 void BattleManager::ProcessAI()
 {
-	if (m_Players[m_ActivePlayer]->IsAI())
+	if (m_AI->HasNotLost())
 	{
 		std::mt19937 rng(std::random_device{}());
 
-		if (m_Players[m_ActivePlayer]->GetCurPokemon().IsDead())
+		if (m_AI->GetCurPokemon().IsDead())
 		{
-			const int numPokemons = m_Players[m_ActivePlayer]->GetNumPokemons();
+			const int numPokemons = m_AI->GetNumPokemons();
 			std::uniform_int_distribution<int> pokemonDist(0, numPokemons - 1);
 			int pokemonChoice;
 
 			do
 			{
 				pokemonChoice = pokemonDist(rng);
-			} while ((pokemonChoice < 0 && pokemonChoice >= numPokemons) || m_Players[m_ActivePlayer]->GetPokemon(pokemonChoice).IsDead());
+			} while ((pokemonChoice < 0 && pokemonChoice >= numPokemons) || m_AI->GetPokemon(pokemonChoice).IsDead());
 
-			m_Players[m_ActivePlayer]->SwitchPokemon(pokemonChoice);
+			m_AI->SwitchPokemon(pokemonChoice);
 		}
 
-		const int numMoves = m_Players[m_ActivePlayer]->GetCurPokemon().GetNumMoves();
+		const int numMoves = m_AI->GetCurPokemon().GetNumMoves();
 		std::uniform_int_distribution<int> moveDist(0, numMoves - 1);
 		int moveChoice;
 
@@ -307,7 +250,29 @@ void BattleManager::ProcessAI()
 			moveChoice = moveDist(rng);
 		} while (moveChoice < 0 && moveChoice >(numMoves - 1));
 
-		m_Players[m_ActivePlayer]->GetCurPokemon().SetNextMove(moveChoice);
+		m_AI->GetCurPokemon().SetNextMove(moveChoice);
+	}
+}
+
+void BattleManager::Battle(Player * attacker_in, Player * target_in)
+{
+	if (!attacker_in->GetHasAttacked() && !attacker_in->GetCurPokemon().IsDead())
+	{
+		Pokemon& attacker = attacker_in->GetCurPokemon();
+		Pokemon& target = target_in->GetCurPokemon();
+		m_CurMove = attacker.GetMove();
+
+		std::cout << attacker.GetName() << " used " << m_CurMove << std::endl;
+		m_Moves[m_CurMove]->Use(attacker, target);
+		std::cout << target.GetName() << " took " << m_Moves[m_CurMove]->GetDamage() << " damage." << std::endl;
+		std::cout << target.GetName() << " has " << target.GetHP() << " HP left.\n" << std::endl;
+
+		attacker_in->SetHasAttacked(true);
+
+		if (target.IsDead())
+		{
+			std::cout << target.GetName() << " fainted...\n\n";
+		}
 	}
 }
 

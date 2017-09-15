@@ -92,7 +92,13 @@ int Player::GetNumPokemons() const
 	return m_NumPokemons;
 }
 
-bool Player::IsAI() const
+bool Player::GetHasAttacked() const
 {
-	return m_AI;
+	return hasAttacked;
 }
+
+void Player::SetHasAttacked(bool attacked_in)
+{
+	hasAttacked = attacked_in;
+}
+
