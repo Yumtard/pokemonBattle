@@ -1,0 +1,2 @@
+LeechLife 8
+Absorb 10

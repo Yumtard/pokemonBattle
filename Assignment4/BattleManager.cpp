@@ -2,62 +2,65 @@
 
 BattleManager::BattleManager()
 {
-	char* tackle = "Tackle";
-	char* leechLife = "Leech Life";
-	char* thunderShock = "Thunder Shock";
-	char* fireBlast = "Fire Blast";
-	char* ember = "Ember";
-	char* waterGun = "Water Gun";
-	char* slam = "Slam";
-	char* quickAttack = "Quick Attack";
-	char* scratch = "Scratch";
+	{
+		std::ifstream in("damaging.txt");
+		int dmg;
+		std::string name;
 
-	m_Moves[tackle] = new DamagingMove(tackle, 10);
-	m_Moves[leechLife] = new AbsorbingMove(leechLife, 8);
-	m_Moves[thunderShock] = new DamagingMove(thunderShock, 12);
-	m_Moves[fireBlast] = new DamagingMove(fireBlast, 15);
-	m_Moves[ember] = new DamagingMove(ember, 10);
-	m_Moves[waterGun] = new DamagingMove(waterGun, 10);
-	m_Moves[slam] = new DamagingMove(slam, 12);
-	m_Moves[quickAttack] = new DamagingMove(quickAttack, 10);
-	m_Moves[scratch] = new DamagingMove(scratch, 12);
+		while (in.good())
+		{
+			in >> name >> dmg;
+			m_Moves[name] = new DamagingMove(name, dmg);
+		}
+	}
 
-	char* pikachuName = "Pikachu";
-	char* charmanderName = "Charmander";
-	char* bulbasaurName = "Bulbasaur";
-	char* squirtleName = "Squirtle";
-	Pokemon* pikachu = new Pokemon(pikachuName, 20);
-	Pokemon* charmander = new Pokemon(charmanderName, 20);
-	Pokemon* bulbasaur = new Pokemon(bulbasaurName, 20);
-	Pokemon* squirtle = new Pokemon(squirtleName, 20);
+	{
+		std::ifstream in("absorbing.txt");
+		int dmg;
+		std::string name;
 
-	pikachu->AddMove(tackle);
-	pikachu->AddMove(thunderShock);
-	pikachu->AddMove(slam);
-	pikachu->AddMove(quickAttack);
+		while (in.good())
+		{
+			in >> name >> dmg;
+			m_Moves[name] = new AbsorbingMove(name, dmg);
+		}
+	}
 
-	charmander->AddMove(tackle);
-	charmander->AddMove(scratch);
-	charmander->AddMove(ember);
-	charmander->AddMove(fireBlast);
+	{
+		m_Player = new Player("Ash");
+		std::ifstream in("player1pokemons.txt");
+		int hp;
+		std::string name, att1, att2, att3, att4;
 
-	bulbasaur->AddMove(tackle);
-	bulbasaur->AddMove(leechLife);
-	bulbasaur->AddMove(slam);
-	bulbasaur->AddMove(scratch);
+		while (in.good())
+		{
+			in >> name >> att1 >> att2 >> att3 >> att4 >> hp;
+			m_Pokemons[name] = new Pokemon(name, hp);
+			m_Pokemons[name]->AddMove(att1);
+			m_Pokemons[name]->AddMove(att2);
+			m_Pokemons[name]->AddMove(att3);
+			m_Pokemons[name]->AddMove(att4);
+			m_Player->AddPokemon(m_Pokemons[name]);
+		}
+	}
 
-	squirtle->AddMove(tackle);
-	squirtle->AddMove(scratch);
-	squirtle->AddMove(waterGun);
-	squirtle->AddMove(slam);
+	{
+		m_AI = new Player("Gary");
+		std::ifstream in("player2pokemons.txt");
+		int hp;
+		std::string name, att1, att2, att3, att4;
 
-	m_Player = new Player("Ash");
-	m_Player->AddPokemon(pikachu);
-	m_Player->AddPokemon(charmander);
-
-	m_AI = new Player("Gary");
-	m_AI->AddPokemon(bulbasaur);
-	m_AI->AddPokemon(squirtle);
+		while (in.good())
+		{
+			in >> name >> att1 >> att2 >> att3 >> att4 >> hp;
+			m_Pokemons[name] = new Pokemon(name, hp);
+			m_Pokemons[name]->AddMove(att1);
+			m_Pokemons[name]->AddMove(att2);
+			m_Pokemons[name]->AddMove(att3);
+			m_Pokemons[name]->AddMove(att4);
+			m_AI->AddPokemon(m_Pokemons[name]);
+		}
+	}
 }
 
 BattleManager::~BattleManager()

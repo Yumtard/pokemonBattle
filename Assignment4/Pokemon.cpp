@@ -1,13 +1,13 @@
 #include "Pokemon.h"
 
-Pokemon::Pokemon(char* name_in, int hp_in)
+Pokemon::Pokemon(const std::string& name_in, int hp_in)
 	:
 	m_Name(name_in),
 	m_hp(hp_in),
 	m_NumMoves(0)
 {}
 
-const char* Pokemon::GetName() const
+const std::string& Pokemon::GetName() const
 {
 	return m_Name;
 }

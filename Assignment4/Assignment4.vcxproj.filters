@@ -57,4 +57,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="damaging.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="absorbing.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="player1pokemons.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="player2pokemons.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

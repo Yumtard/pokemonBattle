@@ -35,6 +35,12 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pokemon.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="absorbing.txt" />
+    <Text Include="damaging.txt" />
+    <Text Include="player1pokemons.txt" />
+    <Text Include="player2pokemons.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A82908BC-16AF-4C5C-907C-4119C93330D2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

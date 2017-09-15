@@ -1,0 +1,9 @@
+Tackle 10
+ThunderShock 12
+FireBlast 14
+Ember 11
+WaterGun 11
+Slam 12
+QuickAttack 10
+Scratch 10
+

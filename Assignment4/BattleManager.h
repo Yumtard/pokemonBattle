@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <random>
+#include <fstream>
 
 class BattleManager
 {
@@ -31,6 +32,7 @@ private:
 	Player* m_Player;
 	Player* m_AI;
 	std::map<std::string, Move*> m_Moves;
+	std::map<std::string, Pokemon*> m_Pokemons;
 	int m_UserInput;
 	std::string m_CurMove;
 	bool m_ForcedSwitch = false;

@@ -1,6 +1,6 @@
 #include "DamagingMove.h"
 
-DamagingMove::DamagingMove(char* name_in, int damage_in)
+DamagingMove::DamagingMove(const std::string& name_in, int damage_in)
 	: 
 	Move(name_in, damage_in)
 {}
